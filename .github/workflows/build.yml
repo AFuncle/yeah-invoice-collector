@@ -30,6 +30,8 @@ jobs:
         run: |
           pyinstaller -F -w -n YeahInvoiceCollector `
             --add-data "config/config.example.json;config" `
+            --collect-data certifi `
+            --hidden-import certifi `
             main.py
 
       - name: Upload artifact

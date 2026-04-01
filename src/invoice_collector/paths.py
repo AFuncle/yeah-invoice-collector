@@ -6,7 +6,26 @@ import sys
 from pathlib import Path
 
 
-BASE_DIR = Path(__file__).resolve().parents[2]
+def _is_frozen() -> bool:
+    return getattr(sys, "frozen", False)
+
+
+def _get_base_dir() -> Path:
+    """User data root: exe directory when frozen, project root otherwise."""
+    if _is_frozen():
+        return Path(sys.executable).resolve().parent
+    return Path(__file__).resolve().parents[2]
+
+
+def _get_bundle_dir() -> Path:
+    """Bundled resource root: _MEIPASS when frozen, project root otherwise."""
+    if _is_frozen():
+        return Path(getattr(sys, "_MEIPASS", str(Path(sys.executable).parent)))
+    return Path(__file__).resolve().parents[2]
+
+
+BASE_DIR = _get_base_dir()
+BUNDLE_DIR = _get_bundle_dir()
 CONFIG_DIR = BASE_DIR / "config"
 DATA_DIR = BASE_DIR / "data"
 LOG_DIR = BASE_DIR / "logs"

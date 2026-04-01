@@ -6,11 +6,11 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from .models import AppConfig, EmailConfig, MailFilterConfig, ParsingConfig, SettlementGroupConfig, StorageConfig, UiPreferences
-from .paths import CONFIG_DIR, ensure_runtime_dirs, get_default_export_dir, get_default_save_dir
+from .paths import BUNDLE_DIR, CONFIG_DIR, ensure_runtime_dirs, get_default_export_dir, get_default_save_dir
 
 
 DEFAULT_CONFIG_PATH = CONFIG_DIR / "config.json"
-EXAMPLE_CONFIG_PATH = CONFIG_DIR / "config.example.json"
+EXAMPLE_CONFIG_PATH = BUNDLE_DIR / "config" / "config.example.json"
 
 
 def _read_json(path: Path) -> dict:

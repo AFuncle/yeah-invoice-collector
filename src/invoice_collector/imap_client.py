@@ -2,11 +2,20 @@ from __future__ import annotations
 
 import email
 import imaplib
+import ssl
 from email.message import Message
 from email.utils import parsedate_to_datetime
 
 from .models import AppConfig, ConnectionTestResult, MailAttachment
 from .parser import decode_mime_text, is_target_mail
+
+
+def _build_ssl_context() -> ssl.SSLContext:
+    try:
+        import certifi
+        return ssl.create_default_context(cafile=certifi.where())
+    except ImportError:
+        return ssl.create_default_context()
 
 
 class ImapMailClient:
@@ -25,7 +34,8 @@ class ImapMailClient:
         email_cfg = self.config.email
         try:
             if email_cfg.use_ssl:
-                self._client = imaplib.IMAP4_SSL(email_cfg.imap_host, email_cfg.imap_port)
+                ctx = _build_ssl_context()
+                self._client = imaplib.IMAP4_SSL(email_cfg.imap_host, email_cfg.imap_port, ssl_context=ctx)
             else:
                 self._client = imaplib.IMAP4(email_cfg.imap_host, email_cfg.imap_port)
         except Exception as exc:
@@ -64,7 +74,8 @@ class ImapMailClient:
         readable_count: int | None = None
         try:
             if email_cfg.use_ssl:
-                client = imaplib.IMAP4_SSL(email_cfg.imap_host, email_cfg.imap_port)
+                ctx = _build_ssl_context()
+                client = imaplib.IMAP4_SSL(email_cfg.imap_host, email_cfg.imap_port, ssl_context=ctx)
             else:
                 client = imaplib.IMAP4(email_cfg.imap_host, email_cfg.imap_port)
             server_ok = True

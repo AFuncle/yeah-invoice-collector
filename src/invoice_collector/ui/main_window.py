@@ -521,6 +521,7 @@ class MainWindow(QMainWindow):
 
     def _bind_events(self) -> None:
         self.choose_save_root_button.clicked.connect(self.choose_save_root)
+        self.open_save_root_button.clicked.connect(self.open_save_root)
         self.test_button.clicked.connect(self.test_connection)
         self.collect_button.clicked.connect(self.toggle_collection)
         self.export_button.clicked.connect(self.export_excel)
