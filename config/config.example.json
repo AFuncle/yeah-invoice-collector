@@ -1,0 +1,53 @@
+{
+  "email": {
+    "email_address": "your_account@yeah.net",
+    "auth_code": "your_imap_auth_code",
+    "imap_host": "imap.yeah.net",
+    "imap_port": 993,
+    "use_ssl": true,
+    "mail_folder": "INBOX",
+    "search_criteria": "SINCE 01-Mar-2026"
+  },
+  "mail_filters": {
+    "sender_keywords": [
+      "中国电信",
+      "189.cn"
+    ],
+    "subject_keywords": [
+      "电子发票",
+      "中国电信"
+    ]
+  },
+  "parsing": {
+    "phone_regex": "(?<!\\d)(1\\d{10})(?!\\d)",
+    "billing_period_patterns": [
+      "(20\\d{2})年(0?[1-9]|1[0-2])月",
+      "(20\\d{2})-(0?[1-9]|1[0-2])",
+      "(20\\d{2})(0[1-9]|1[0-2])"
+    ]
+  },
+  "settlement_groups": {
+    "default": "大盘",
+    "mappings": {
+      "19120056416": "墨秀",
+      "19120076109": "墨秀",
+      "19120076054": "墨秀"
+    }
+  },
+  "storage": {
+    "database_path": "data/invoices.db",
+    "save_root": "/Users/afuncle/Documents/YeahInvoiceCollector/attachments",
+    "export_root": "/Users/afuncle/Documents/YeahInvoiceCollector/exports",
+    "folder_rule": "{account_name}/{settlement_group}/{billing_month}"
+  },
+  "ui_preferences": {
+    "recent_configs": [
+      "/Users/afuncle/Desktop/邮件采集/config/config.example.json"
+    ],
+    "last_save_root": "/Users/afuncle/Documents/YeahInvoiceCollector/attachments",
+    "log_mode": "simple",
+    "default_export_scope": "all",
+    "window_width": 1360,
+    "window_height": 860
+  }
+}
