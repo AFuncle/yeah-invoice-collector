@@ -91,6 +91,10 @@ class InvoiceCollectorService:
                         logger("detail", f"跳过附件 {attachment.filename}，原因：仅支持 PDF。")
                         continue
                     try:
+                        if self.database.record_exists(parsed.message_uid, attachment.filename):
+                            summary.duplicate_records += 1
+                            logger("detail", f"重复附件，已跳过 {attachment.filename} (UID={parsed.message_uid})")
+                            continue
                         record = self._save_attachment_record(parsed, attachment.filename, attachment.payload, attachment.size)
                         inserted = self.database.insert_invoice(record)
                         if inserted:
@@ -98,6 +102,7 @@ class InvoiceCollectorService:
                             logger("detail", f"已保存 {attachment.filename} -> {record.attachment_path}")
                         else:
                             summary.duplicate_records += 1
+                            Path(record.attachment_path).unlink(missing_ok=True)
                             logger("detail", f"重复附件，已跳过 {attachment.filename} (UID={parsed.message_uid})")
                     except Exception as exc:
                         summary.failed_records += 1

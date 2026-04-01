@@ -57,6 +57,11 @@ class InvoiceDatabase:
             if name not in existing:
                 conn.execute(f"ALTER TABLE invoices ADD COLUMN {name} {definition}")
 
+    def record_exists(self, message_uid: str, attachment_name: str) -> bool:
+        sql = "SELECT 1 FROM invoices WHERE message_uid = ? AND attachment_name = ? LIMIT 1"
+        with self._connect() as conn:
+            return conn.execute(sql, (message_uid, attachment_name)).fetchone() is not None
+
     def insert_invoice(self, record: InvoiceRecord) -> bool:
         sql = """
         INSERT OR IGNORE INTO invoices (
