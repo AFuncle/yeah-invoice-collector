@@ -6,6 +6,9 @@ on:
       - "v*"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-windows:
     runs-on: windows-latest
@@ -35,7 +38,7 @@ jobs:
           name: YeahInvoiceCollector-Windows
           path: dist/YeahInvoiceCollector.exe
 
-      - name: Create Release (on tag)
+      - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
