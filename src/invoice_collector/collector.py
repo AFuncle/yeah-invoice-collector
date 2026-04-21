@@ -139,7 +139,8 @@ class InvoiceCollectorService:
             billing_month=parsed.billing_period,
         )
         archive_dir = ensure_dir(save_root / relative_dir)
-        target = self._build_unique_path(archive_dir, attachment_name, parsed.message_uid)
+        display_name = _build_display_filename(parsed.billing_period, parsed.phone_number)
+        target = self._build_unique_path(archive_dir, display_name, parsed.message_uid)
         target.write_bytes(payload)
         amount = extract_invoice_amount(payload)
         return InvoiceRecord(
@@ -175,6 +176,16 @@ class InvoiceCollectorService:
             if not indexed.exists():
                 return indexed
             index += 1
+
+
+def _build_display_filename(billing_period: str, phone_number: str) -> str:
+    year, month = "", ""
+    if billing_period and "-" in billing_period:
+        parts = billing_period.split("-", 1)
+        year = parts[0]
+        month = str(int(parts[1]))
+    phone = phone_number or "未知号码"
+    return f"{year}年【中国电信】代表号码为{phone}，账期为{month}月的电子发票.pdf"
 
 
 def _safe_folder_name(value: str) -> str:
